@@ -1,65 +1,125 @@
-import Image from "next/image";
 
-export default function Home() {
+import Link from "next/link"
+import { Navbar } from "@/components/Navbar"
+import { Footer } from "@/components/Footer"
+import { ProductCard } from "@/components/ProductCard"
+import { CATEGORIES } from "@/lib/categories"
+
+async function getFeaturedProducts() {
+  try {
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/products?limit=12`, { next: { revalidate: 60 } })
+    const data = await res.json()
+    return data.products || []
+  } catch {
+    return []
+  }
+}
+
+export default async function HomePage() {
+  const products = await getFeaturedProducts()
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      <Navbar />
+
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-blue-700 to-blue-900 text-white py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Buy & Sell Anything in Nigeria
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-blue-200 text-lg mb-8 max-w-2xl mx-auto">
+            Secure escrow payments. Verified sellers. Thousands of listings.
           </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/register" className="bg-white text-blue-700 font-bold px-8 py-3 rounded-xl hover:bg-blue-50 transition-colors text-lg">
+              Start Selling
+            </Link>
+            <Link href="#categories" className="border-2 border-white text-white font-bold px-8 py-3 rounded-xl hover:bg-white/10 transition-colors text-lg">
+              Browse Products
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* How it works */}
+      <section className="py-12 px-4 bg-blue-50">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">How themarket works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { step: "1", title: "Seller lists product", desc: "Post up to 20 products with photos, price, and delivery info." },
+              { step: "2", title: "Buyer pays securely", desc: "Payment is held in escrow by Paylode for 24 hours." },
+              { step: "3", title: "Confirm & release", desc: "Confirm delivery and funds are released to the seller instantly." },
+            ].map((item) => (
+              <div key={item.step} className="text-center p-6 bg-white rounded-xl border border-blue-100">
+                <div className="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                  {item.step}
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
+                <p className="text-gray-500 text-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
-  );
+      </section>
+
+      {/* Categories */}
+      <section id="categories" className="py-12 px-4">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Browse by Category</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-3">
+            {CATEGORIES.map((cat) => (
+              <Link
+                key={cat.slug}
+                href={`/${cat.slug}`}
+                className="flex flex-col items-center gap-2 p-4 bg-white border border-gray-200 rounded-xl hover:border-blue-700 hover:bg-blue-50 transition-colors text-center group"
+              >
+                <span className="text-2xl">{cat.icon}</span>
+                <span className="text-xs font-medium text-gray-700 group-hover:text-blue-700 leading-tight">{cat.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Latest listings */}
+      <section className="py-8 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Latest Listings</h2>
+            <Link href="/all" className="text-blue-700 font-medium hover:underline text-sm">View all →</Link>
+          </div>
+          {products.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {products.map((p: any) => <ProductCard key={p.id} product={p} />)}
+            </div>
+          ) : (
+            <div className="text-center py-16 text-gray-500">
+              <p className="text-lg">No listings yet. Be the first to sell!</p>
+              <Link href="/register" className="btn-primary inline-block mt-4">Start Selling</Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Sign up CTA */}
+      <section className="bg-blue-700 text-white py-16 px-4 text-center">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold mb-4">Ready to start selling?</h2>
+          <p className="text-blue-200 mb-6">Join thousands of sellers on themarket. Sign up today and list your first product for free.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/register" className="bg-white text-blue-700 font-bold px-8 py-3 rounded-xl hover:bg-blue-50 transition-colors">
+              Sign up as Seller
+            </Link>
+            <Link href="/register/agent" className="border-2 border-white text-white font-bold px-8 py-3 rounded-xl hover:bg-white/10 transition-colors">
+              Become an Agent
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </>
+  )
 }
