@@ -26,11 +26,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: "/dashboard/agent", label: "Overview" },
     { href: "/dashboard/agent/settings", label: "Settings" },
   ]
+  const isSuperAdmin = user?.role === "SUPER_ADMIN"
   const adminLinks = [
     { href: "/admin", label: "Analytics" },
     { href: "/admin/sellers", label: "Sellers" },
     { href: "/admin/agents", label: "Agents" },
     { href: "/admin/orders", label: "Orders" },
+    ...(isSuperAdmin ? [{ href: "/admin/admins", label: "Admin Users" }] : []),
   ]
 
   const links = isAdmin ? adminLinks : isAgent ? agentLinks : sellerLinks

@@ -17,7 +17,10 @@ export default function LoginPage() {
     const res = await signIn("credentials", { ...form, redirect: false })
     setLoading(false)
     if (res?.error) { setError("Invalid email or password"); return }
-    router.push("/dashboard/seller")
+    const { getSession } = await import("next-auth/react")
+    const session = await getSession()
+    const role = (session?.user as any)?.role
+    router.push(role === "ADMIN" || role === "SUPER_ADMIN" ? "/admin" : "/dashboard/seller")
   }
 
   return (
@@ -26,7 +29,7 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h1>
         <p className="text-gray-500 text-sm mb-6">Sign in to your themarket account</p>
         <button
-          onClick={() => signIn("google", { callbackUrl: "/dashboard/seller" })}
+          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
           className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-2.5 font-medium text-gray-700 hover:bg-gray-50 transition-colors mb-4"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
