@@ -27,7 +27,7 @@ export default function LoginPage() {
     <div className="w-full max-w-md">
       <div className="bg-white rounded-2xl shadow-lg p-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h1>
-        <p className="text-gray-500 text-sm mb-6">Sign in to your themarket account</p>
+        <p className="text-gray-500 text-sm mb-6">Sign in to your biz9ja account</p>
         <button
           onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
           className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-2.5 font-medium text-gray-700 hover:bg-gray-50 transition-colors mb-4"

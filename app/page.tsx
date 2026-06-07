@@ -1,22 +1,21 @@
-
 import Link from "next/link"
 import { Navbar } from "@/components/Navbar"
 import { Footer } from "@/components/Footer"
 import { ProductCard } from "@/components/ProductCard"
 import { CATEGORIES } from "@/lib/categories"
 
-async function getFeaturedProducts() {
+async function getProducts(params: string) {
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/products?limit=12`, { next: { revalidate: 60 } })
-    const data = await res.json()
-    return data.products || []
-  } catch {
-    return []
-  }
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/products?${params}`, { next: { revalidate: 60 } })
+    return (await res.json()).products || []
+  } catch { return [] }
 }
 
 export default async function HomePage() {
-  const products = await getFeaturedProducts()
+  const [latest, deals] = await Promise.all([
+    getProducts("limit=12"),
+    getProducts("discounted=1&limit=8"),
+  ])
 
   return (
     <>
@@ -25,9 +24,7 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="bg-gradient-to-br from-blue-700 to-blue-900 text-white py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Buy & Sell Anything in Nigeria
-          </h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Buy & Sell Anything in Nigeria</h1>
           <p className="text-blue-200 text-lg mb-8 max-w-2xl mx-auto">
             Secure escrow payments. Verified sellers. Thousands of listings.
           </p>
@@ -45,7 +42,7 @@ export default async function HomePage() {
       {/* How it works */}
       <section className="py-12 px-4 bg-blue-50">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">How themarket works</h2>
+          <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">How biz9ja works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { step: "1", title: "Seller lists product", desc: "Post up to 20 products with photos, price, and delivery info." },
@@ -83,6 +80,27 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Special Deals — only shown when deals exist */}
+      {deals.length > 0 && (
+        <section className="py-10 px-4 bg-red-50">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🔥</span>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Special Deals</h2>
+                  <p className="text-sm text-red-600 font-medium">Limited-time discounts from verified sellers</p>
+                </div>
+              </div>
+              <Link href="/deals" className="text-red-600 font-medium hover:underline text-sm">View all deals →</Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+              {deals.map((p: any) => <ProductCard key={p.id} product={p} />)}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Latest listings */}
       <section className="py-8 px-4">
         <div className="max-w-7xl mx-auto">
@@ -90,9 +108,9 @@ export default async function HomePage() {
             <h2 className="text-2xl font-bold text-gray-900">Latest Listings</h2>
             <Link href="/all" className="text-blue-700 font-medium hover:underline text-sm">View all →</Link>
           </div>
-          {products.length > 0 ? (
+          {latest.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {products.map((p: any) => <ProductCard key={p.id} product={p} />)}
+              {latest.map((p: any) => <ProductCard key={p.id} product={p} />)}
             </div>
           ) : (
             <div className="text-center py-16 text-gray-500">
@@ -107,7 +125,7 @@ export default async function HomePage() {
       <section className="bg-blue-700 text-white py-16 px-4 text-center">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-3xl font-bold mb-4">Ready to start selling?</h2>
-          <p className="text-blue-200 mb-6">Join thousands of sellers on themarket. Sign up today and list your first product for free.</p>
+          <p className="text-blue-200 mb-6">Join thousands of sellers on biz9ja. Sign up today and list your first product for free.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/register" className="bg-white text-blue-700 font-bold px-8 py-3 rounded-xl hover:bg-blue-50 transition-colors">
               Sign up as Seller

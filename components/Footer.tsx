@@ -1,4 +1,3 @@
-
 import Link from "next/link"
 
 export function Footer() {
@@ -6,7 +5,7 @@ export function Footer() {
     <footer className="bg-blue-900 text-blue-100 mt-16">
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
         <div>
-          <h3 className="text-white font-bold text-lg mb-3">themarket</h3>
+          <h3 className="text-white font-bold text-lg mb-3">biz9ja</h3>
           <p className="text-sm text-blue-300">Nigeria's trusted marketplace for buying and selling with secure escrow payments.</p>
         </div>
         <div>
@@ -28,11 +27,14 @@ export function Footer() {
           <ul className="space-y-2 text-sm">
             <li><Link href="/how-it-works" className="hover:text-white transition-colors">How it works</Link></li>
             <li><Link href="/escrow" className="hover:text-white transition-colors">Escrow protection</Link></li>
+            <li><Link href="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
+            <li><Link href="/terms#privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+            <li><a href="mailto:admin@biz9ja.com" className="hover:text-white transition-colors">admin@biz9ja.com</a></li>
           </ul>
         </div>
       </div>
       <div className="border-t border-blue-800 py-4 text-center text-sm text-blue-400">
-        © {new Date().getFullYear()} themarket. All rights reserved. Payments secured by Paylode.
+        &copy; 2026 biz9ja. All rights, copyrights and patents reserved.
       </div>
     </footer>
   )

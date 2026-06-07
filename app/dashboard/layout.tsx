@@ -1,4 +1,3 @@
-
 "use client"
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
@@ -32,6 +31,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: "/admin/sellers", label: "Sellers" },
     { href: "/admin/agents", label: "Agents" },
     { href: "/admin/orders", label: "Orders" },
+    { href: "/admin/emails", label: "Email Templates" },
     ...(isSuperAdmin ? [{ href: "/admin/admins", label: "Admin Users" }] : []),
   ]
 

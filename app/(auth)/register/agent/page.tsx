@@ -1,4 +1,3 @@
-
 "use client"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -16,6 +15,7 @@ export default function AgentRegisterPage() {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [tcAccepted, setTcAccepted] = useState(false)
   const [form, setForm] = useState({
     name:"", email:"", password:"", confirm:"",
     businessName:"", registrationType:"UNREGISTERED", registrationNum:"",
@@ -96,9 +96,17 @@ export default function AgentRegisterPage() {
               </div>
               <div><label className="block text-sm font-medium text-gray-700 mb-1">Password *</label><input type="password" className="input" value={form.password} onChange={e=>set("password",e.target.value)} required minLength={8}/></div>
               <div><label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password *</label><input type="password" className="input" value={form.confirm} onChange={e=>set("confirm",e.target.value)} required/></div>
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input type="checkbox" checked={tcAccepted} onChange={e=>setTcAccepted(e.target.checked)} className="mt-0.5 shrink-0"/>
+                <span className="text-xs text-gray-500 leading-snug">
+                  I have read and agree to biz9ja&apos;s{" "}
+                  <Link href="/terms" target="_blank" className="text-blue-700 hover:underline">Terms &amp; Conditions</Link>
+                  , including the Data Protection and Privacy Policy. I understand that my personal and business information will be processed as described therein.
+                </span>
+              </label>
               <div className="flex gap-3">
                 <button type="button" onClick={()=>setStep(2)} className="btn-outline flex-1">← Back</button>
-                <button type="submit" disabled={loading} className="btn-primary flex-1 disabled:opacity-60">{loading?"Registering...":"Register as Agent"}</button>
+                <button type="submit" disabled={loading || !tcAccepted} className="btn-primary flex-1 disabled:opacity-60">{loading?"Registering...":"Register as Agent"}</button>
               </div>
             </div>
           )}

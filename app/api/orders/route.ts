@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     email: buyerEmail,
     name: buyerName,
     phone: buyerPhone,
-    description: `themarket: ${product.title}`,
+    description: `biz9ja: ${product.title}`,
     metadata: { orderId: order.id, productId, sellerId: product.sellerId },
   })
 

@@ -7,7 +7,7 @@ import { Providers } from "./providers"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "themarket — Buy & Sell Anything",
+  title: "biz9ja — Buy & Sell Anything",
   description: "Nigeria's trusted marketplace. Buy and sell electronics, fashion, vehicles, property and more with secure escrow payments.",
 }
 

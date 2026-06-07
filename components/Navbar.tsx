@@ -1,6 +1,6 @@
-
 "use client"
 import Link from "next/link"
+import Image from "next/image"
 import { useSession, signOut } from "next-auth/react"
 import { useState } from "react"
 
@@ -12,8 +12,8 @@ export function Navbar() {
   return (
     <nav className="bg-blue-700 text-white sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
-        <Link href="/" className="text-2xl font-bold tracking-tight">
-          the<span className="text-blue-200">market</span>
+        <Link href="/">
+          <Image src="/biz9ja-logo.svg" alt="biz9ja" width={280} height={94} priority />
         </Link>
 
         {/* Search */}

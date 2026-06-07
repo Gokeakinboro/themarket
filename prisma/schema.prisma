@@ -155,6 +155,7 @@ model Product {
   views         Int              @default(0)
   orders        Order[]
   negotiations  Negotiation[]
+  discountPercent  Int              @default(0)
   // LAUNCH_ADDON: isFeatured Boolean @default(false)
   // LAUNCH_ADDON: featuredUntil DateTime?
   createdAt     DateTime         @default(now())
@@ -286,4 +287,13 @@ model VerificationToken {
   token      String   @unique
   expires    DateTime
   @@unique([identifier, token])
+}
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  name      String
+  subject   String
+  html      String
+  updatedAt DateTime @updatedAt
 }

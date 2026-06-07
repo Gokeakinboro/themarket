@@ -7,6 +7,18 @@ import bcrypt from "bcryptjs"
 import { prisma } from "./prisma"
 
 export const authOptions: NextAuthOptions = {
+  cookies: {
+    sessionToken: {
+      name: '__Secure-next-auth.session-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true,
+        domain: '.paylodeservices.com',
+      },
+    },
+  },
   adapter: PrismaAdapter(prisma) as any,
   session: { strategy: "jwt" },
   pages: { signIn: "/login", newUser: "/register" },
